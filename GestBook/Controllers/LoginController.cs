@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using GestBook.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace GestBook.Controllers
 {
@@ -23,17 +24,15 @@ namespace GestBook.Controllers
             if (ModelState.IsValid)
             {
                 string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password);
-                //bool passwordsMatch = BCrypt.Net.BCrypt.Verify(enteredPassword, hashedPasswordFromDatabase); для проверки совпадения
-                HttpContext.Session.SetString("login", user.Name); // создание сессионной переменной
+                //bool passwordsMatch = BCrypt.Net.BCrypt.Verify(enteredPassword, hashedPasswordFromDatabase); для проверки совпадения           
                 user.Password = hashedPassword; 
                 try
                 {
                     db.Add(user);
                     await db.SaveChangesAsync();
-
                 }
                 catch { }
-                return View("Login");
+                return RedirectToAction("Login");
             }
             return View(user);
         }
@@ -43,12 +42,24 @@ namespace GestBook.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Login(User user)
+        public async Task<IActionResult> Login(User user)
         {
-            if (ModelState.IsValid)
-            {
-                HttpContext.Session.SetString("login", user.Name); // создание сессионной переменной
-                return RedirectToAction("Index", "Home");
+            if (ModelState.IsValid) {
+                
+               var u =await  db.Users.FirstOrDefaultAsync(m => m.Name == user.Name);
+              // bool u=(db.Users?.Any(e => e.Name == user.Name)).GetValueOrDefault();
+                { 
+                    if (u != null && BCrypt.Net.BCrypt.Verify(user.Password, u.Password))
+                    {
+                        HttpContext.Session.SetString("login", user.Name); // создание сессионной переменной
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else
+                    {
+                        HttpContext.Session.SetString("wrongPassword", "wrong");
+                        return View(user);
+                    }
+                }
             }
             return View(user);
         }
@@ -56,6 +67,23 @@ namespace GestBook.Controllers
         {
             HttpContext.Session.Clear(); // очищается сессия
             return RedirectToAction("Index", "Home");
+        }
+        public async Task<IActionResult> AddMessage([Bind("Text")]Message mes)
+        {
+            if (ModelState.IsValid)
+            {
+                var u = await db.Users.FirstOrDefaultAsync(m => m.Name == HttpContext.Session.GetString("login"));
+                mes.user= u;
+                mes.MessageDate=DateTime.Now.ToString();
+                try
+                {
+                    db.Add(mes);
+                    await db.SaveChangesAsync();
+                }
+                catch { }
+                return RedirectToAction("Index", "Home");
+            }
+            return View(mes);
         }
     }
 }

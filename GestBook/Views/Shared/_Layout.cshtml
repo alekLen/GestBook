@@ -19,6 +19,25 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    @using Microsoft.AspNetCore.Http
+
+                    @if (Context.Session.GetString("login") != null)
+                    {
+                       
+                        @using (Html.BeginForm("Logout", "Login", FormMethod.Get))
+                        {
+                              <div class="navbar-collapse collapse d-sm-inline-flex ">
+                            <span>
+                                Здравствуйте, @Context.Session.GetString("login")&nbsp;&nbsp;
+                            </span>
+                            <div>
+                                <input type="submit" value="Выйти" />
+                                </div>
+                            </div>
+                        }
+
+                    }
+                    else{ 
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Login">Войти</a>
@@ -27,6 +46,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Registration">Зарегестрироваться</a>
                         </li>
                     </ul>
+                    }
                 </div>
             </div>
         </nav>

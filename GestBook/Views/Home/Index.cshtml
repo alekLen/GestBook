@@ -1,25 +1,28 @@
 ﻿@{
     ViewData["Title"] = "Гостевая книга";
 }
+@model GestBook.Models.Message
 @using Microsoft.AspNetCore.Http
-
-@if (Context.Session.GetString("login") != null)
-        {
-<div>
-        Здравствуйте, @Context.Session.GetString("login")
-</div>
-    @using (Html.BeginForm("Logout", "Login", FormMethod.Get))
-    {
-    <div>
-        <input type="submit" value="Выйти" />
-    </div>
-    }
-        <span>Введите сообщение </span>
-    <asp:TextBox ID="txtArea" runat="server" TextMode="MultiLine" Rows="4" Columns="50"></asp:TextBox>
-
-   }
-
 <div class="text-center">
     <h1 class="display-4">Гостевая книга</h1>
-    
 </div>
+@if (Context.Session.GetString("login") != null)
+{
+    @using (Html.BeginForm("AddMessage", "Login", FormMethod.Get)){ 
+        <span>напишите отзыв </span>
+                 @Html.TextAreaFor(model => model.Text)
+        <div>
+            <input type="submit" value="Добавить отзыв" />
+        </div>
+    }
+}
+@foreach(var m in ViewBag.list)
+{
+     <div>
+         <div>@m.user.Name</div>
+         <div>@m.Text</div>
+         <div>@m.MessageDate</div>
+     </div>
+}
+
+

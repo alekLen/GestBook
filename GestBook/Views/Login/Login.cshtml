@@ -18,6 +18,10 @@
 
             <div>
                 @Html.LabelFor(model => model.Password)
+                @if (Context.Session.GetString("wrongPasswordn") != null)
+                {
+                    <span style=" color:red">Неверный пароль</span>
+                }
                 <div>
                     @Html.PasswordFor(model => model.Password)
                     @Html.ValidationMessageFor(model => model.Password, "")
@@ -30,14 +34,6 @@
                 </div>
             </div>
         }
-        else
-        {
-            <div>
-                <div>
-                    Вводить логин и пароль уже не нужно!
-                </div>
-                @Html.ActionLink("На главную", "Index", "Home")
-            </div>
-        }
+       
     </div>
 }
