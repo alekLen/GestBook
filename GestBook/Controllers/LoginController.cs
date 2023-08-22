@@ -23,7 +23,9 @@ namespace GestBook.Controllers
             if (ModelState.IsValid)
             {
                 string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password);
+                //bool passwordsMatch = BCrypt.Net.BCrypt.Verify(enteredPassword, hashedPasswordFromDatabase); для проверки совпадения
                 HttpContext.Session.SetString("login", user.Name); // создание сессионной переменной
+                user.Password = hashedPassword; 
                 try
                 {
                     db.Add(user);
