@@ -1,1 +1,43 @@
-﻿
+﻿@model GestBook.Models.User
+@using Microsoft.AspNetCore.Http
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div>
+        @if (Context.Session.GetString("login") == null)
+        {
+            @Html.ValidationSummary(true, "")
+            <div>
+                @Html.LabelFor(model => model.Name)
+                <div>
+                    @Html.EditorFor(model => model.Name)
+                    @Html.ValidationMessageFor(model => model.Name, "")
+                </div>
+            </div>
+
+            <div>
+                @Html.LabelFor(model => model.Password)
+                <div>
+                    @Html.PasswordFor(model => model.Password)
+                    @Html.ValidationMessageFor(model => model.Password, "")
+                </div>
+            </div>
+
+            <div>
+                @Html.LabelFor(model => model.Password)
+                <div>
+                    @Html.PasswordFor(model => model.Password)
+                    @Html.ValidationMessageFor(model => model.Password, "")
+                </div>
+            </div>
+
+            <div>
+                <div>
+                    <input type="submit" value="Войти" />
+                </div>
+            </div>
+        }
+       
+    </div>
+}

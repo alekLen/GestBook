@@ -1,11 +1,12 @@
 ﻿@{
     ViewData["Title"] = "Гостевая книга";
 }
+@using Microsoft.AspNetCore.Http
 
- @if (Context.Session.GetString("login") == null)
+@if (Context.Session.GetString("login") != null)
         {
 <div>
-    Здравствуйте, @Context.Session.GetString("login")
+        Здравствуйте, @Context.Session.GetString("login")
 </div>
     @using (Html.BeginForm("Logout", "Login", FormMethod.Get))
     {
