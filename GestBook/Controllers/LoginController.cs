@@ -11,14 +11,14 @@ namespace GestBook.Controllers
         {
             db = context;
         }
-        public IActionResult Registtration()
+        public IActionResult Registration()
         {
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Registtration([Bind("Name,Password")] User user)
+        public async Task<IActionResult> Registration([Bind("Name,Password")] User user)
         {
             if (ModelState.IsValid)
             {

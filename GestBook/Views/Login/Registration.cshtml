@@ -1,43 +1,39 @@
-﻿@model GestBook.Models.User
+﻿
 @using Microsoft.AspNetCore.Http
 
-@using (Html.BeginForm())
-{
+<form id="registrationForm" action="Registration" method="post">
     @Html.AntiForgeryToken()
     <div>
-        @if (Context.Session.GetString("login") == null)
-        {
             @Html.ValidationSummary(true, "")
             <div>
-                @Html.LabelFor(model => model.Name)
+               <span>Введите логин</span>
                 <div>
-                    @Html.EditorFor(model => model.Name)
-                    @Html.ValidationMessageFor(model => model.Name, "")
+                <input type="text"  required="required" />
                 </div>
             </div>
 
             <div>
-                @Html.LabelFor(model => model.Password)
+            <span>Придумайте пароль для входа</span>
                 <div>
-                    @Html.PasswordFor(model => model.Password)
-                    @Html.ValidationMessageFor(model => model.Password, "")
+                <input type="password" id="password" name="password" required="required" />
                 </div>
             </div>
 
             <div>
-                @Html.LabelFor(model => model.Password)
+            <span>Подтвердите пароль</span>
+            <span id="true" style="display:none; color:red">*** пароли не совпадают</span>
                 <div>
-                    @Html.PasswordFor(model => model.Password)
-                    @Html.ValidationMessageFor(model => model.Password, "")
+                <input type="password" id="confirmPassword" name="confirmPassword" required="required" />
                 </div>
             </div>
 
             <div>
                 <div>
-                    <input type="submit" value="Войти" />
+                <button type="submit">Зарегистрироваться</button>
                 </div>
             </div>
-        }
+      
        
     </div>
-}
+    </form>
+  
