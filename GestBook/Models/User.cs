@@ -11,6 +11,6 @@ namespace GestBook.Models
         [Required(ErrorMessage = "Поле должно быть заполнено")]
         [Display(Name = "Пароль: ")]
         public string Password { get; set; }
-        public ICollection<Message> Messages { get; set; }
+        public ICollection<Message>? Messages { get; set; }
     }
 }

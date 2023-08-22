@@ -1,4 +1,4 @@
-﻿
+﻿@model GestBook.Models.User
 @using Microsoft.AspNetCore.Http
 
 <form id="registrationForm" action="Registration" method="post">
@@ -8,14 +8,14 @@
             <div>
                <span>Введите логин</span>
                 <div>
-                <input type="text"  required="required" />
+                @Html.EditorFor(model => model.Name)
                 </div>
             </div>
 
             <div>
             <span>Придумайте пароль для входа</span>
                 <div>
-                <input type="password" id="password" name="password" required="required" />
+                @Html.PasswordFor(model => model.Password, new { id = "Password" })
                 </div>
             </div>
 
@@ -31,9 +31,7 @@
                 <div>
                 <button type="submit">Зарегистрироваться</button>
                 </div>
-            </div>
-      
-       
+            </div>      
     </div>
     </form>
   

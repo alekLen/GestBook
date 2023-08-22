@@ -19,9 +19,10 @@ namespace GestBook.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Registration([Bind("Name,Password")] User user)
-        {
+        {          
             if (ModelState.IsValid)
             {
+                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password);
                 HttpContext.Session.SetString("login", user.Name); // создание сессионной переменной
                 try
                 {

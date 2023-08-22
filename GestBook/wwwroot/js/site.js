@@ -3,7 +3,7 @@
 
 // Write your JavaScript code.
 document.getElementById("registrationForm").addEventListener("submit", function (event) {
-    var password = document.getElementById("password").value;
+    var password = document.getElementById("Password").value;
     var confirmPassword = document.getElementById("confirmPassword").value;
 
     if (password !== confirmPassword) {
