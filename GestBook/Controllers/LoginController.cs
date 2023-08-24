@@ -2,6 +2,8 @@
 using GestBook.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace GestBook.Controllers
 {
@@ -19,16 +21,31 @@ namespace GestBook.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Registration([Bind("Name,Password")] User user)
+        public async Task<IActionResult> Registration( RegisterModel user)
         {          
             if (ModelState.IsValid)
             {
-                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password);
+                User u = new();
+                u.Name = user.Login;
+                byte[] saltbuf = new byte[16];
+                RandomNumberGenerator randomNumberGenerator = RandomNumberGenerator.Create();
+                randomNumberGenerator.GetBytes(saltbuf);
+                StringBuilder sb = new StringBuilder(16);
+                for (int i = 0; i < 16; i++)
+                    sb.Append(string.Format("{0:X2}", saltbuf[i]));
+                string salt = sb.ToString();
+                Salt s = new();
+                s.salt=salt;
+                string password =salt + user.Password;
+                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
                 //bool passwordsMatch = BCrypt.Net.BCrypt.Verify(enteredPassword, hashedPasswordFromDatabase); для проверки совпадения           
-                user.Password = hashedPassword; 
+                u.Password = hashedPassword; 
                 try
                 {
-                    db.Add(user);
+                    db.Add(u);
+                    await db.SaveChangesAsync();
+                    s.user = u;
+                    db.Add(s);
                     await db.SaveChangesAsync();
                 }
                 catch { }
@@ -42,21 +59,30 @@ namespace GestBook.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(User user)
+        public async Task<IActionResult> Login(LoginModel user)
         {
             if (ModelState.IsValid) {
                 
-               var u =await  db.Users.FirstOrDefaultAsync(m => m.Name == user.Name);
-              // bool u=(db.Users?.Any(e => e.Name == user.Name)).GetValueOrDefault();
+               var u =await  db.Users.FirstOrDefaultAsync(m => m.Name == user.Login);
+                var s = await db.Salts.FirstOrDefaultAsync(m => m.user == u);           
                 { 
-                    if (u != null && BCrypt.Net.BCrypt.Verify(user.Password, u.Password))
+                    if (u != null && s!=null)
                     {
-                        HttpContext.Session.SetString("login", user.Name); // создание сессионной переменной
-                        return RedirectToAction("Index", "Home");
+                        string conf = s.salt + user.Password;
+                        if (BCrypt.Net.BCrypt.Verify(conf, u.Password))
+                        {
+                            HttpContext.Session.SetString("login", user.Login); // создание сессионной переменной
+                            return RedirectToAction("Index", "Home");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "не правильный логин или пароль");
+                            return View(user);
+                        }
                     }
                     else
                     {
-                        HttpContext.Session.SetString("wrongPassword", "wrong");
+                        ModelState.AddModelError("", "не правильный логин или пароль");
                         return View(user);
                     }
                 }

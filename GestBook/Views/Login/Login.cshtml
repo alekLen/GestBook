@@ -1,4 +1,4 @@
-﻿@model GestBook.Models.User
+﻿@model GestBook.Models.LoginModel
 @using Microsoft.AspNetCore.Http
 
 @using (Html.BeginForm())
@@ -9,19 +9,15 @@
         {
             @Html.ValidationSummary(true, "")
             <div>
-                @Html.LabelFor(model => model.Name)
+                @Html.LabelFor(model => model.Login)
                 <div>
-                    @Html.EditorFor(model => model.Name)
-                    @Html.ValidationMessageFor(model => model.Name, "")
+                    @Html.EditorFor(model => model.Login)
+                    @Html.ValidationMessageFor(model => model.Login, "")
                 </div>
             </div>
 
             <div>
-                @Html.LabelFor(model => model.Password)
-                @if (Context.Session.GetString("wrongPasswordn") != null)
-                {
-                    <span style=" color:red">Неверный пароль</span>
-                }
+                @Html.LabelFor(model => model.Password)             
                 <div>
                     @Html.PasswordFor(model => model.Password)
                     @Html.ValidationMessageFor(model => model.Password, "")

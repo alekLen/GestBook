@@ -1,4 +1,4 @@
-﻿@model GestBook.Models.User
+﻿@model GestBook.Models.RegisterModel
 @using Microsoft.AspNetCore.Http
 
 <form id="registrationForm" action="Registration" method="post">
@@ -6,24 +6,27 @@
     <div>
             @Html.ValidationSummary(true, "")
             <div>
-               <span>Введите логин</span>
+               @Html.DisplayNameFor(model => model.Login)
                 <div>
-                @Html.EditorFor(model => model.Name)
+                @Html.EditorFor(model => model.Login)
+                <span asp-validation-for="Login" class="text-danger"></span>
                 </div>
             </div>
 
             <div>
-            <span>Придумайте пароль для входа</span>
+            @Html.DisplayNameFor(model => model.Password)
                 <div>
                 @Html.PasswordFor(model => model.Password, new { id = "Password" })
+                <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
             </div>
 
             <div>
-            <span>Подтвердите пароль</span>
-            <span id="true" style="display:none; color:red">*** пароли не совпадают</span>
+            @Html.DisplayNameFor(model => model.PasswordConfirm)
+           
                 <div>
-                <input type="password" id="confirmPassword" name="confirmPassword" required="required" />
+                @Html.PasswordFor(model => model.PasswordConfirm)
+                <span asp-validation-for="PasswordConfirm" class="text-danger"></span>
                 </div>
             </div>
 
