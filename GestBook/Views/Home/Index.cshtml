@@ -4,25 +4,34 @@
 @model GestBook.Models.Message
 @using Microsoft.AspNetCore.Http
 <div class="text-center">
-    <h1 class="display-4">Гостевая книга</h1>
+    <h1 class="display-4 card1">Гостевая книга</h1>
 </div>
 @if (Context.Session.GetString("login") != null)
 {
-    @using (Html.BeginForm("AddMessage", "Login", FormMethod.Get)){ 
-        <span>напишите отзыв </span>
-                 @Html.TextAreaFor(model => model.Text)
+   
+    @using (Html.BeginForm("AddMessage", "Login", FormMethod.Get)){
+
+        <br>
+        <br>
+        <div class="card">
+                @Html.TextAreaFor(model => model.Text)
+            </div>
         <div>
+            <br>
             <input type="submit" value="Добавить отзыв" />
         </div>
     }
+  
 }
+<hr />
 @foreach(var m in ViewBag.list)
 {
-     <div>
+    <div >
          <div>@m.user.Name</div>
-         <div>@m.Text</div>
-         <div>@m.MessageDate</div>
+         <div class="card">@m.Text</div>
+         <div class="c">@m.MessageDate</div>
      </div>
+     <hr />
 }
 
 

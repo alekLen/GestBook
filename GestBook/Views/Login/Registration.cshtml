@@ -3,7 +3,7 @@
 
 <form id="registrationForm" action="Registration" method="post">
     @Html.AntiForgeryToken()
-    <div>
+    <div class="card">
             @Html.ValidationSummary(true, "")
             <div>
                @Html.DisplayNameFor(model => model.Login)

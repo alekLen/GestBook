@@ -4,7 +4,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    <div>
+    <div  class="card">
         @if (Context.Session.GetString("login") == null)
         {
             @Html.ValidationSummary(true, "")
@@ -25,6 +25,7 @@
             </div>
 
             <div>
+                <br>
                 <div>
                     <input type="submit" value="Войти" />
                 </div>
