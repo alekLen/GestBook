@@ -1,5 +1,6 @@
 
 using GestBook.Models;
+using GestBook.Repository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +23,7 @@ builder.Services.AddSession(options =>
 });
 // Добавляем сервисы MVC
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IRepository, GestBookRepository>();
 var app = builder.Build();
 app.UseStaticFiles();
 app.UseSession();
