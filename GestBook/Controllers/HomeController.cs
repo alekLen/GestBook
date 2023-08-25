@@ -1,4 +1,5 @@
 ﻿using GestBook.Models;
+using GestBook.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -7,17 +8,18 @@ namespace GestBook.Controllers
 {
     public class HomeController : Controller
     {
-        GestBookContext db;
 
-        public HomeController(GestBookContext context)
+        IRepository rep;
+
+        public HomeController(IRepository context)
         {
-            db = context;
+           rep = context;
         }
 
-        public IActionResult Index()
+        public async Task< IActionResult> Index()
         {
-            var ms =  db.Messages.Include(p => p.user);
-            ViewBag.list = ms.ToList();
+            var ms = await rep.GetMessage();
+            ViewBag.list = ms;
             return View();
         }
 
