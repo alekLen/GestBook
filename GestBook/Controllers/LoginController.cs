@@ -4,15 +4,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Cryptography;
 using System.Text;
+using GestBook.Repository;
 
 namespace GestBook.Controllers
 {
     public class LoginController : Controller
     {
-        GestBookContext db;
-        public LoginController(GestBookContext context)
+        IRepository rep;
+        public LoginController(IRepository context)
         {
-            db = context;
+            rep = context;
         }
         public IActionResult Registration()
         {
@@ -42,11 +43,11 @@ namespace GestBook.Controllers
                 u.Password = hashedPassword; 
                 try
                 {
-                    db.Add(u);
-                    await db.SaveChangesAsync();
+                   await rep.AddUser(u);
+                    await rep.Save();
                     s.user = u;
-                    db.Add(s);
-                    await db.SaveChangesAsync();
+                    await rep.AddSalt(s);
+                    await rep.Save();
                 }
                 catch { }
                 return RedirectToAction("Login");
@@ -63,8 +64,8 @@ namespace GestBook.Controllers
         {
             if (ModelState.IsValid) {
                 
-               var u =await  db.Users.FirstOrDefaultAsync(m => m.Name == user.Login);
-                var s = await db.Salts.FirstOrDefaultAsync(m => m.user == u);           
+               var u =await rep.GetUser(user.Login);
+                var s = await rep.GetSalt(u);           
                 { 
                     if (u != null && s!=null)
                     {
@@ -98,13 +99,13 @@ namespace GestBook.Controllers
         {
             if (ModelState.IsValid)
             {
-                var u = await db.Users.FirstOrDefaultAsync(m => m.Name == HttpContext.Session.GetString("login"));
+                var u = await rep.GetUser( HttpContext.Session.GetString("login"));
                 mes.user= u;
                 mes.MessageDate=DateTime.Now.ToString();
                 try
                 {
-                    db.Add(mes);
-                    await db.SaveChangesAsync();
+                    await rep.AddMessage(mes);
+                    await rep.Save();
                 }
                 catch { }
                 return RedirectToAction("Index", "Home");
