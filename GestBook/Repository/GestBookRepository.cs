@@ -14,7 +14,7 @@ namespace GestBook.Repository
         {
             return await db.Salts.FirstOrDefaultAsync(m => m.user == u);
         }
-        public async Task<List<Message>> GetMessage()
+        public async Task<IEnumerable<Message>> GetMessage()
         {
             return  await db.Messages.Include(p => p.user).ToListAsync();
         }

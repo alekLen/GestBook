@@ -1,8 +1,93 @@
 ﻿@{
     ViewData["Title"] = "Гостевая книга";
 }
-@model GestBook.Models.Message
+
 @using Microsoft.AspNetCore.Http
+
+@section Scripts{
+    <script>
+       $(document).ready(function () {
+
+            // загрузка студентов
+            getAllMessages();
+        });
+           
+
+            // создание строки для таблицы
+            let row = function (message) {
+                return "<div>" + message.user + " </div>" + 
+                    "<div class='card'  >" + message.Text + " </div>"+
+                "<div class='c' >" + message.MessageDate + " </div><hr />"
+            };
+
+            // Получение всех студентов
+            function getAllMessages() {
+                $.ajax({
+                    url: '@Url.Action("GetMessages", "Home")',
+                    type: 'GET',
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        let rows = "";
+                        let message = JSON.parse(response);
+                        $.each(message, function (index, message) {
+                            // добавляем полученные элементы в таблицу
+                            rows += row(message);
+                        })
+                        $("#message-list").html(rows);
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
+                    }
+                });
+            }
+            // GET BY ID
+           
+
+
+            //SAVE
+           
+            // UPDATE
+          
+            //DELETE
+           
+            
+       
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="card" id="login" style="display:none;">
+        @if (Context.Session.GetString("login") == null)
+        {
+            @Html.ValidationSummary(true, "")
+            <label>Login</label>
+            <span id="error-login" style="color:red;display:none;">*uncorrectly login</span>
+            <div class="c2">
+                <input type="text" class="form-control" id="log" required>
+            </div>
+
+            <div>
+                <label>Password</label>
+                <div class="c2">
+                    <input type="password" class="form-control" id="pass" required>
+                </div>
+            </div>
+
+            <div>
+                <br>
+                <div>
+                    <input type="submit" value="Войти" />
+                </div>
+            </div>
+        }
+
+    </div><br /><br />
+}
 <div class="text-center">
     <h1 class="display-4 card1">Гостевая книга</h1>
 </div>
@@ -14,7 +99,7 @@
         <br>
         <br>
         <div class="card">
-                @Html.TextAreaFor(model => model.Text)
+               
             </div>
         <div>
             <br>
@@ -24,14 +109,12 @@
   
 }
 <hr />
-@foreach(var m in ViewBag.list)
-{
-    <div >
-         <div>@m.user.Name</div>
-         <div class="card">@m.Text</div>
-         <div class="c">@m.MessageDate</div>
+
+
+    <div id="message-list">
+      
      </div>
-     <hr />
-}
+<hr />
+
 
 

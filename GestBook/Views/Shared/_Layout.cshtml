@@ -21,7 +21,7 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     @using Microsoft.AspNetCore.Http
 
-                    @if (Context.Session.GetString("login") != null)
+                    @if (Context.Session.GetString("login") != null )
                     {
                        
                         @using (Html.BeginForm("Logout", "Login", FormMethod.Get))
