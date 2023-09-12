@@ -91,8 +91,14 @@ namespace GestBook.Controllers
         }
         public ActionResult Logout()
         {
+            string response = "Жаль, что вы так быстро покидаете нас!\n Возвращайтесь быстрее!";
             HttpContext.Session.Clear(); // очищается сессия
-            return RedirectToAction("Index", "Home");
+            return Json(response);
+        }
+        public ActionResult GetName()
+        {
+            string response = HttpContext.Session.GetString("login");
+            return Json(response);
         }
         public async Task<IActionResult> AddMessage([Bind("Text")]Message mes)
         {

@@ -20,6 +20,26 @@
                 registrNone();
                 login();
             });
+            $("body").on("click", ".btn-Logout", function () {
+                $.ajax({
+                    url: '@Url.Action("Logout", "Login")',
+                    type: 'GET',
+                    contentType: false,
+                    processData: false,                   
+                    success: function (response) {
+                        alert(response);
+                        let l = document.getElementById("wellcome");
+                        l.style.display = "none";
+                        let lt = document.getElementById("enter");
+                        lt.style.display = "flex";
+                        let lm = document.getElementById("message");
+                        lm.style.display = "none";
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
+                    }
+                });
+            });
 
             $("body").on("click", ".btn-Reg", function () {
                 loginNone();
@@ -39,6 +59,7 @@
                     success: function (response) {
                         alert(response);
                         registrNone();
+                        ClearRegistr();
                         login();
                     },
                     error: function (x, y, z) {
@@ -57,20 +78,56 @@
                     processData: false,
                     data: formData,
                     success: function (response) {
-                        alert(response);
+                        alert(response);                       
                         loginNone();
+                        ClearLogin();
                         let l = document.getElementById("wellcome");
                         l.style.display = "block";
                         let lt = document.getElementById("enter");
                         lt.style.display = "none";
                         let lm = document.getElementById("message");
                         lm.style.display = "block";
+                        $.ajax({
+                            url: '@Url.Action("GetName", "Login")',
+                            type: 'GET',
+                            contentType: false,
+                            processData: false,                          
+                            success: function (response) {
+                                $("#wellcomeTo").html(response);
+                            },
+                            error: function (x, y, z) {
+                                alert(x + '\n' + y + '\n' + z);
+                            }
+                        });
                     },
                     error: function (x, y, z) {
                         alert(x + '\n' + y + '\n' + z);
                     }
                 });
             });
+            $("#btn-addMess").on("click", function () {
+                let formData = new FormData();
+                formData.append("Login", $("#Login").val());
+                formData.append("Password", $("#Reg_Password1").val());
+                formData.append("PasswordConfirm", $("#Reg_Password2").val());
+                $.ajax({
+                    url: '@Url.Action("Registration", "Login")',
+                    type: 'POST',
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function (response) {
+                        alert(response);
+                        registrNone();
+                        ClearRegistr();
+                        login();
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
+                    }
+                });
+            });
+
        });
            
         let login =function(){
@@ -117,6 +174,15 @@
             let l = document.getElementById("registrationForm");
             l.style.display = "none";
         };
+         let ClearRegistr = function () {
+             $("#Login").val("");
+            $("#Reg_Password1").val("");
+            $("#Reg_Password2").val("");
+        };
+        let ClearLogin = function () {
+             $("#log").val("");
+             $("#pass").val("");
+        };
             
        
     </script>
@@ -147,12 +213,10 @@
             <div>
                 <br>
                 <div>
-                    <a href="javascript:void(0)" class="nav-link text-dark card2 " id="btn-log">Войти</a>
+                    <a href="javascript:void(0)" class="nav-link text-dark card2 but" id="btn-log">Войти</a>
                 </div>
             </div>
-        }
-        <br />
-        <br />
+        }       
     </div>
 }
 <form id="registrationForm" style="display:none;" >
@@ -187,14 +251,13 @@
 
         <div>
             <div>                              
-                <a href="javascript:void(0)" class="nav-link text-dark card2 " id="btn-registration">Зарегестрироваться</a>
+                <a href="javascript:void(0)" class="nav-link text-dark card2 but" id="btn-registration">Регистрация</a>
             </div>
         </div>
-    </div>
-    <br />
-    <br />
+    </div>   
 </form>
-
+<br />
+<br />
 <div class="text-center">
     <h1 class="display-4 card1">Гостевая книга</h1>
 </div>
@@ -203,11 +266,11 @@
         <br>
         <br>
         <div class="card">
-             <textarea rows="3"></textarea>  
+             <textarea rows="3" id="TextMessage"></textarea>  
             </div>
         <div>
             <br>
-            <input type="submit" value="Добавить отзыв" />
+            <a href="javascript:void(0)" class="nav-link text-dark card2 but" id="btn-addMess">Отправить</a>
         </div>
     </form>
   

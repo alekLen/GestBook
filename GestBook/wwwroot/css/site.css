@@ -83,3 +83,10 @@ body {
 .c2{
     width:350px;
 }
+.but {
+    width: 180px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    background-color: lightseagreen;
+    text-align: center;
+}

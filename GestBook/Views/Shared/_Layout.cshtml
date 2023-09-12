@@ -26,11 +26,11 @@
                         @using (Html.BeginForm("Logout", "Login", FormMethod.Get))
                         {
                               <div class="navbar-collapse collapse d-sm-inline-flex c c1">
-                                <span style="margin-left:50px;" id="wellcomeTo">
-                                Здравствуйте, @Context.Session.GetString("login")&nbsp;&nbsp;
+                                <span style="margin-left:50px;">
+                                    Здравствуйте,<span id="wellcomeTo"></span>&nbsp;&nbsp;
                             </span>
                             <div>
-                                <input type="submit" value="Выйти" />
+                                    <a href="javascript:void(0)" class="nav-link text-dark card2 btn-Logout">Выйти</a>
                                 </div>
                             </div>
                         }
