@@ -1,18 +1,86 @@
 ﻿@{
     ViewData["Title"] = "Гостевая книга";
 }
-
+@model GestBook.Models.RegisterModel
 @using Microsoft.AspNetCore.Http
 
 @section Scripts{
     <script>
        $(document).ready(function () {
 
-            // загрузка студентов
             getAllMessages();
-        });
-           
 
+            $("body").on("click", ".btn-gestBook", function () {
+                registrNone();           
+                loginNone();
+                getAllMessages();
+            });
+
+            $("body").on("click", ".btn-Login", function () {
+                registrNone();
+                login();
+            });
+
+            $("body").on("click", ".btn-Reg", function () {
+                loginNone();
+                registr();
+            });
+            $("#btn-registration").on("click", function () {
+                let formData = new FormData();
+                formData.append("Login", $("#Login").val());
+                formData.append("Password", $("#Reg_Password1").val());
+                formData.append("PasswordConfirm", $("#Reg_Password2").val());
+                $.ajax({
+                    url: '@Url.Action("Registration", "Login")',
+                    type: 'POST',
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function (response) {
+                        alert(response);
+                        registrNone();
+                        login();
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
+                    }              
+                });
+            });
+            $("#btn-log").on("click", function () {
+                let formData = new FormData();
+                formData.append("Login", $("#log").val());
+                formData.append("Password", $("#pass").val());
+                $.ajax({
+                    url: '@Url.Action("Login", "Login")',
+                    type: 'POST',
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function (response) {
+                        alert(response);
+                        loginNone();
+                        let l = document.getElementById("wellcome");
+                        l.style.display = "block";
+                        let lt = document.getElementById("enter");
+                        lt.style.display = "none";
+                        let lm = document.getElementById("message");
+                        lm.style.display = "block";
+                    },
+                    error: function (x, y, z) {
+                        alert(x + '\n' + y + '\n' + z);
+                    }
+                });
+            });
+       });
+           
+        let login =function(){
+            let l = document.getElementById("login");
+            l.style.display = "block";
+        };
+        let loginNone = function () {
+            let l = document.getElementById("login");
+            l.style.display = "none";
+        };
             // создание строки для таблицы
             let row = function (message) {
                 return "<div>" + message.user + " </div>" + 
@@ -41,16 +109,14 @@
                     }
                 });
             }
-            // GET BY ID
-           
-
-
-            //SAVE
-           
-            // UPDATE
-          
-            //DELETE
-           
+        let registr = function () {
+            let l = document.getElementById("registrationForm");
+            l.style.display = "block";
+        };
+        let registrNone = function () {
+            let l = document.getElementById("registrationForm");
+            l.style.display = "none";
+        };
             
        
     </script>
@@ -81,33 +147,69 @@
             <div>
                 <br>
                 <div>
-                    <input type="submit" value="Войти" />
+                    <a href="javascript:void(0)" class="nav-link text-dark card2 " id="btn-log">Войти</a>
                 </div>
             </div>
         }
 
     </div><br /><br />
 }
+<form id="registrationForm" style="display:none;" >
+   
+    @Html.AntiForgeryToken()
+    <div class="card">
+        @Html.ValidationSummary(true, "")
+        <div>
+            @Html.DisplayNameFor(model => model.Login)
+            <div>
+            @Html.EditorFor(model => model.Login)
+                <span asp-validation-for="Login" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div>
+            @Html.DisplayNameFor(model => model.Password)
+            <div>
+                @Html.PasswordFor(model => model.Password, new { id = "Reg_Password1" })
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div>
+            @Html.DisplayNameFor(model => model.PasswordConfirm)
+
+            <div>
+            @Html.PasswordFor(model => model.PasswordConfirm, new { id = "Reg_Password2" })
+                <span asp-validation-for="PasswordConfirm" class="text-danger"></span>
+            </div>
+        </div><br />
+
+        <div>
+            <div>                              
+                <a href="javascript:void(0)" class="nav-link text-dark card2 " id="btn-registration">Зарегестрироваться</a>
+            </div>
+        </div>
+    </div>
+</form>
+<br />
+<br />
 <div class="text-center">
     <h1 class="display-4 card1">Гостевая книга</h1>
 </div>
-@if (Context.Session.GetString("login") != null)
-{
-   
-    @using (Html.BeginForm("AddMessage", "Login", FormMethod.Get)){
-
+<div id="message" style="display:none;">
+   <form>
         <br>
         <br>
         <div class="card">
-               
+             <textarea rows="3"></textarea>  
             </div>
         <div>
             <br>
             <input type="submit" value="Добавить отзыв" />
         </div>
-    }
+    </form>
   
-}
+</div>
 <hr />
 
 

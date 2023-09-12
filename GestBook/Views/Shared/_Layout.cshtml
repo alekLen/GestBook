@@ -13,7 +13,7 @@
     <header style="background-color:azure">
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3" style="background-color:azure">
             <div class="container-fluid" style="background-color:azure">
-                <a class="navbar-brand card2" asp-area="" asp-controller="Home" asp-action="Index">Гостевая книга</a>
+                <a href="javascript:void(0)" class="navbar-brand card2 btn-gestBook">Гостевая книга</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -21,13 +21,12 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     @using Microsoft.AspNetCore.Http
 
-                    @if (Context.Session.GetString("login") != null )
-                    {
-                       
+
+                    <div id="wellcome" style="display:none;">
                         @using (Html.BeginForm("Logout", "Login", FormMethod.Get))
                         {
                               <div class="navbar-collapse collapse d-sm-inline-flex c c1">
-                            <span style="margin-left:50px;">
+                                <span style="margin-left:50px;" id="wellcomeTo">
                                 Здравствуйте, @Context.Session.GetString("login")&nbsp;&nbsp;
                             </span>
                             <div>
@@ -35,18 +34,17 @@
                                 </div>
                             </div>
                         }
-
-                    }
-                    else{ 
-                    <ul class="navbar-nav flex-grow-1 c c1">
+                    </div>
+                     
+                    <ul class="navbar-nav flex-grow-1 c c1" id="enter">
                         <li class="nav-item">
-                            <a class="nav-link text-dark card2" asp-area="" asp-controller="Login" asp-action="Login">Войти</a>
+                                <a href="javascript:void(0)" class="nav-link text-dark card2 btn-Login">Войти</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark card2" asp-area="" asp-controller="Login" asp-action="Registration">Зарегестрироваться</a>
+                                <a href="javascript:void(0)" class="nav-link text-dark card2 btn-Reg">Зарегестрироваться</a>
                         </li>
                     </ul>
-                    }
+                    
                 </div>
             </div>
         </nav>

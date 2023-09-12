@@ -15,13 +15,12 @@ namespace GestBook.Controllers
         {
             rep = context;
         }
-        public IActionResult Registration()
+        /*public IActionResult Registration()
         {
             return View();
-        }
+        }*/
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Registration( RegisterModel user)
         {          
             if (ModelState.IsValid)
@@ -38,8 +37,7 @@ namespace GestBook.Controllers
                 Salt s = new();
                 s.salt=salt;
                 string password =salt + user.Password;
-                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
-                //bool passwordsMatch = BCrypt.Net.BCrypt.Verify(enteredPassword, hashedPasswordFromDatabase); для проверки совпадения           
+                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);         
                 u.Password = hashedPassword; 
                 try
                 {
@@ -50,16 +48,16 @@ namespace GestBook.Controllers
                     await rep.Save();
                 }
                 catch { }
-                return RedirectToAction("Login");
+                string response = "Вы успешно зарегестрировались!";
+                return Json(response);
             }
-            return View(user);
+            return Problem("Проблемы регистрации!");
         }
-        public IActionResult Login()
+       /* public IActionResult Login()
         {
             return View();
-        }
+        }*/
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel user)
         {
             if (ModelState.IsValid) {
@@ -73,22 +71,23 @@ namespace GestBook.Controllers
                         if (BCrypt.Net.BCrypt.Verify(conf, u.Password))
                         {
                             HttpContext.Session.SetString("login", user.Login); // создание сессионной переменной
-                            return RedirectToAction("Index", "Home");
+                            string response = "Добро пожаловать, "+ user.Login;
+                            return Json(response);
                         }
                         else
                         {
                             ModelState.AddModelError("", "не правильный логин или пароль");
-                            return View(user);
+                            return Problem("Проблемы входа!");
                         }
                     }
                     else
                     {
                         ModelState.AddModelError("", "не правильный логин или пароль");
-                        return View(user);
+                        return Problem("Проблемы входа!"); 
                     }
                 }
             }
-            return View(user);
+            return Problem("Проблемы входа!");
         }
         public ActionResult Logout()
         {
