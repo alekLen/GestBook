@@ -100,6 +100,7 @@ namespace GestBook.Controllers
             string response = HttpContext.Session.GetString("login");
             return Json(response);
         }
+        [HttpPost]
         public async Task<IActionResult> AddMessage([Bind("Text")]Message mes)
         {
             if (ModelState.IsValid)
@@ -111,11 +112,18 @@ namespace GestBook.Controllers
                 {
                     await rep.AddMessage(mes);
                     await rep.Save();
+                    string response ="Ваш отзыв добавлен в Гостевую книгу!";
+                    return Json(response);
                 }
-                catch { }
-                return RedirectToAction("Index", "Home");
+                catch
+                {
+                    string response1 = "Ошибка добавления! попробуйте позже!";
+                    return Json(response1);
+                }
+                
             }
-            return View(mes);
+            string response2 = "Ошибка добавления! попробуйте позже!";
+            return Json(response2);
         }
     }
 }
