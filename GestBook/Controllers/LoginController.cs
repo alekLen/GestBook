@@ -137,6 +137,13 @@ namespace GestBook.Controllers
                 isUnique = false;
             return Json(isUnique);
         }
-       
+        public async Task<IActionResult> IsLoginIn(string login)
+        {
+            bool isUnique = true;
+            User u = await rep.GetUser(login);
+            if (u == null)
+                isUnique = false;
+            return Json(!isUnique);
+        }
     }
 }

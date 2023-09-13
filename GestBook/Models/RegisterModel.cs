@@ -7,7 +7,7 @@ namespace GestBook.Models
     {
         [Required]
         [Display(Name = "логин: ")]
-        [Remote("IsLoginInUse", "Login", ErrorMessage = "логин уже зарегестрирован")]
+        [Remote("IsLoginIn", "Login", ErrorMessage = "логин уже зарегестрирован")]
         public string? Login { get; set; }
 
         [Required]
