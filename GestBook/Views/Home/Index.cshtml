@@ -42,10 +42,10 @@
             });
 
             $("body").on("click", ".btn-Reg", function () {
-                loginNone();
+                loginNone();                
                 registr();
             });
-            $("#btn-registration").on("click", function () {
+            $("#btn-registration").on("click", function () {                
                 let formData1 = new FormData();
                 formData1.append("Login", $("#Login").val());
                 $.ajax({
@@ -58,6 +58,8 @@
                         if(response)
                         {                          
                             alert("логин уже используется!")
+                            let l1 = document.getElementById("error-Rlogin");
+                            l1.style.display = "inline";
                         }
                         else
                         {
@@ -90,6 +92,10 @@
             
                
               
+            });
+            $("#Login").on("focus", function (){
+                let l1 = document.getElementById("error-Rlogin");
+                l1.style.display = "none";
             });
             $("#btn-log").on("click", function () {
                 let formData = new FormData();
@@ -254,6 +260,7 @@
         @Html.ValidationSummary(true, "")
         <div>
             @Html.DisplayNameFor(model => model.Login)
+            <span id="error-Rlogin" style="color:red;display:none;">*не верный логин или пароль</span>
             <div>
             @Html.EditorFor(model => model.Login)
                 <span asp-validation-for="Login" class="text-danger"></span>
