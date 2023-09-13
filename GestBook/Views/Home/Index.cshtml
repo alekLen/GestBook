@@ -100,7 +100,10 @@
                     processData: false,
                     data: formData,
                     success: function (response) {
-                        alert(response);                       
+                        
+                        if(response){
+                            let l1 = document.getElementById("error-login");
+                            l1.style.display = "none";
                         loginNone();
                         ClearLogin();
                         let l = document.getElementById("wellcome");
@@ -121,6 +124,12 @@
                                 alert(x + '\n' + y + '\n' + z);
                             }
                         });
+                        }
+                        else
+                        {
+                            let l2 = document.getElementById("error-login");
+                            l2.style.display = "inline";
+                        }
                     },
                     error: function (x, y, z) {
                         alert(x + '\n' + y + '\n' + z);
@@ -174,8 +183,7 @@
                     success: function (response) {
                         let rows = "";
                         let message = JSON.parse(response);
-                        $.each(message, function (index, message) {
-                            // добавляем полученные элементы в таблицу
+                        $.each(message, function (index, message) {                           
                             rows += row(message);
                         })
                         $("#message-list").html(rows);
@@ -217,7 +225,7 @@
         {
             @Html.ValidationSummary(true, "")
             <label>Login</label>
-            <span id="error-login" style="color:red;display:none;">*uncorrectly login</span>
+            <span id="error-login" style="color:red;display:none;">*не верный логин или пароль</span>
             <div class="c2">
                 <input type="text" class="form-control" id="log" required>
             </div>
@@ -284,6 +292,7 @@
    <form>
         <br>
         <br>
+        <label>Оставьте свой отзыв</label>
         <div class="card">
              <textarea rows="3" id="TextMessage"></textarea>  
             </div>
@@ -295,8 +304,6 @@
   
 </div>
 <hr />
-
-
     <div id="message-list">
       
      </div>

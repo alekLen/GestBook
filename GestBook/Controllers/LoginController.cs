@@ -76,18 +76,21 @@ namespace GestBook.Controllers
                         }
                         else
                         {
-                            ModelState.AddModelError("", "не правильный логин или пароль");
-                            return Problem("Проблемы входа!");
+                            //ModelState.AddModelError("", "не правильный логин или пароль");
+                            //return Problem("Проблемы входа!");
+                            return Json(false);
                         }
                     }
                     else
                     {
-                        ModelState.AddModelError("", "не правильный логин или пароль");
-                        return Problem("Проблемы входа!"); 
+                        // ModelState.AddModelError("", "не правильный логин или пароль");
+                        // return Problem("Проблемы входа!"); 
+                        return Json(false);
                     }
                 }
             }
-            return Problem("Проблемы входа!");
+            // return Problem("Проблемы входа!");
+            return Json(false);
         }
         public ActionResult Logout()
         {
