@@ -260,7 +260,7 @@
         @Html.ValidationSummary(true, "")
         <div>
             @Html.DisplayNameFor(model => model.Login)
-            <span id="error-Rlogin" style="color:red;display:none;">*не верный логин или пароль</span>
+            <span id="error-Rlogin" style="color:red;display:none;">*логин уже зарегестрирован</span>
             <div>
             @Html.EditorFor(model => model.Login)
                 <span asp-validation-for="Login" class="text-danger"></span>
