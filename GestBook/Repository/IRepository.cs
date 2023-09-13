@@ -10,5 +10,6 @@ namespace GestBook.Repository
         Task AddSalt(Salt s);
         Task AddMessage(Message mess);
         Task Save();
+        Task<bool> GetLogins(string login);
     }
 } 

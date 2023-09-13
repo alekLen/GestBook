@@ -37,5 +37,10 @@ namespace GestBook.Repository
         public async Task Save() {
              await db.SaveChangesAsync();
         }
+        public async Task<bool> GetLogins(string s)
+        {
+            return await db.Users.AllAsync(u => u.Name != s);
+
+        }
     }
 }

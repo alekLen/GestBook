@@ -46,26 +46,48 @@
                 registr();
             });
             $("#btn-registration").on("click", function () {
-                let formData = new FormData();
-                formData.append("Login", $("#Login").val());
-                formData.append("Password", $("#Reg_Password1").val());
-                formData.append("PasswordConfirm", $("#Reg_Password2").val());
+               
                 $.ajax({
-                    url: '@Url.Action("Registration", "Login")',
-                    type: 'POST',
+                    url: '@Url.Action("IsLoginInUse", "Login")',
+                    type: 'GET',
                     contentType: false,
                     processData: false,
-                    data: formData,
                     success: function (response) {
-                        alert(response);
-                        registrNone();
-                        ClearRegistr();
-                        login();
+                        if(response)
+                        {                          
+                            alert("логин уже используется!")
+                        }
+                        else
+                        {
+                            let formData = new FormData();
+                            formData.append("Login", $("#Login").val());
+                            formData.append("Password", $("#Reg_Password1").val());
+                            formData.append("PasswordConfirm", $("#Reg_Password2").val());
+                            $.ajax({
+                                url: '@Url.Action("Registration", "Login")',
+                                type: 'POST',
+                                contentType: false,
+                                processData: false,
+                                data: formData,
+                                success: function (response) {
+                                    alert(response);
+                                    registrNone();
+                                    ClearRegistr();
+                                    login();
+                                },
+                                error: function (x, y, z) {
+                                    alert(x + '\n' + y + '\n' + z);
+                                }
+                            });
+                        }
                     },
                     error: function (x, y, z) {
                         alert(x + '\n' + y + '\n' + z);
-                    }              
+                    }
                 });
+            
+               
+              
             });
             $("#btn-log").on("click", function () {
                 let formData = new FormData();

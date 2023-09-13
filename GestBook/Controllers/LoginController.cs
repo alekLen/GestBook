@@ -125,5 +125,11 @@ namespace GestBook.Controllers
             string response2 = "Ошибка добавления! попробуйте позже!";
             return Json(response2);
         }
+        public async Task<IActionResult> IsLoginInUse(string login)
+        {
+
+            bool isUnique = await rep.GetLogins(login);
+            return Json(isUnique);
+        }
     }
 }

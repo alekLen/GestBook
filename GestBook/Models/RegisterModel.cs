@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace GestBook.Models
 {
@@ -6,6 +7,7 @@ namespace GestBook.Models
     {
         [Required]
         [Display(Name = "логин: ")]
+        [Remote("IsLoginInUse", "Login", ErrorMessage = "логин уже зарегестрирован")]
         public string? Login { get; set; }
 
         [Required]
