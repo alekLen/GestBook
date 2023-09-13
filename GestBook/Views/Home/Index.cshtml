@@ -46,13 +46,15 @@
                 registr();
             });
             $("#btn-registration").on("click", function () {
-               
+                let formData1 = new FormData();
+                formData1.append("Login", $("#Login").val());
                 $.ajax({
                     url: '@Url.Action("IsLoginInUse", "Login")',
-                    type: 'GET',
+                    type: 'POST',
                     contentType: false,
                     processData: false,
-                    success: function (response) {
+                    data: formData1,
+                    success: function (response) {                      
                         if(response)
                         {                          
                             alert("логин уже используется!")
@@ -221,8 +223,7 @@
 {
     @Html.AntiForgeryToken()
     <div class="card" id="login" style="display:none;">
-        @if (Context.Session.GetString("login") == null)
-        {
+      
             @Html.ValidationSummary(true, "")
             <label>Login</label>
             <span id="error-login" style="color:red;display:none;">*не верный логин или пароль</span>
@@ -243,7 +244,7 @@
                     <a href="javascript:void(0)" class="nav-link text-dark card2 but" id="btn-log">Войти</a>
                 </div>
             </div>
-        }       
+              
     </div>
 }
 <form id="registrationForm" style="display:none;" >
