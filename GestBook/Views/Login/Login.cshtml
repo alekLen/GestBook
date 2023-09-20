@@ -1,17 +1,15 @@
 ﻿@model GestBook.Models.LoginModel
 @using Microsoft.AspNetCore.Http
 
-@using (Html.BeginForm())
-{
+<form  id="formLog">
     @Html.AntiForgeryToken()
-    <div  class="card">
-        @if (Context.Session.GetString("login") == null)
-        {
-            @Html.ValidationSummary(true, "")
+    <div  class="card c3">
+        
+            <span id="error-login1" style="color:red;display:none;">*не верный логин или пароль</span>
             <div>
                 @Html.LabelFor(model => model.Login)
                 <div>
-                    @Html.EditorFor(model => model.Login)
+                    <input asp-for="Login" class="form-control" />
                     @Html.ValidationMessageFor(model => model.Login, "")
                 </div>
             </div>
@@ -19,18 +17,18 @@
             <div>
                 @Html.LabelFor(model => model.Password)             
                 <div>
-                    @Html.PasswordFor(model => model.Password)
+                    <input asp-for="Password" type="password" class="form-control" />
                     @Html.ValidationMessageFor(model => model.Password, "")
                 </div>
             </div>
 
             <div>
                 <br>
-                <div>
+                @*<div>
                     <input type="submit" value="Войти" />
-                </div>
+                </div>*@
             </div>
-        }
+       
        
     </div>
-}
+</form>

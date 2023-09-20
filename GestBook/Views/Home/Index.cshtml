@@ -11,14 +11,54 @@
             getAllMessages();
 
             $("body").on("click", ".btn-gestBook", function () {
-                registrNone();           
-                loginNone();
+                //registrNone();           
+               // loginNone();
                 getAllMessages();
             });
 
-            $("body").on("click", ".btn-Login", function () {
-                registrNone();
-                login();
+            $("body").on("click", ".btn-Login", function (e) {
+               // registrNone();
+               // login();
+                e.preventDefault();
+
+                $("<div id='dialogContent'></div>")
+                    .addClass("dialog")
+                    .appendTo("body")
+                    .load("/Login/Login")
+                    .dialog({
+                        title: $(this).attr("data-dialog-title"),
+                        close: function () { $(this).remove() },
+                        modal: true,
+                        buttons: {
+                            "Войти": function () {
+                                $.ajax({
+                                    url: "@Url.Action("Login", "Login")",
+                                    type: "POST",
+                                    data: $('#formLog').serialize(),
+                                    datatype: "json",
+                                    success: function (response) {
+
+                                        if (response) {
+                                            let l1 = document.getElementById("error-login1");
+                                            l1.style.display = "none";
+                                            let l = document.getElementById("wellcome");
+                                            l.style.display = "block";
+                                            let lt = document.getElementById("enter");
+                                            lt.style.display = "none";
+                                            let lm = document.getElementById("message");
+                                            lm.style.display = "block";
+                                            $("#wellcomeTo").html(response);
+                                            $("#dialogContent").remove();
+                                        }
+                                        else {
+                                             let l2 = document.getElementById("error-login1");
+                                             l2.style.display = "inline";
+                                        }                                            
+                                    }
+                                });
+                            }
+                        }
+                    });
             });
             $("body").on("click", ".btn-Logout", function () {
                 $.ajax({
@@ -41,9 +81,67 @@
                 });
             });
 
-            $("body").on("click", ".btn-Reg", function () {
-                loginNone();                
-                registr();
+            $("body").on("click", ".btn-Reg", function (e) {
+               // loginNone();                
+               // registr();
+                e.preventDefault();
+
+                $("<div id='dialogContent1'></div>")
+                    .addClass("dialog")
+                    .appendTo("body")
+                    .load("/Login/Registration")
+                    .dialog({
+                        title: $(this).attr("data-dialog-title"),
+                        close: function () { $(this).remove() },
+                        modal: true,
+                        buttons: {
+                            "Зарегестрироваться": function () {
+                                let formData1 = new FormData();
+                                formData1.append("Login", $("#Login").val());
+                                $.ajax({
+                                    url: '@Url.Action("IsLoginInUse", "Login")',
+                                    type: 'POST',
+                                    contentType: false,
+                                    processData: false,
+                                    data: formData1,
+                                    success: function (response) {
+                                        if (response) {
+                                            alert("логин уже используется!")
+                                            let l1 = document.getElementById("error-Rlogin1");
+                                            l1.style.display = "inline";
+                                        }
+                                        else {
+                                            let formData = new FormData();
+                                            formData.append("Login", $("#Login").val());
+                                            formData.append("Password", $("#Password").val());
+                                            formData.append("PasswordConfirm", $("#PasswordConfirm").val());
+                                            $.ajax({
+                                                url: '@Url.Action("Registration", "Login")',
+                                                type: 'POST',
+                                                contentType: false,
+                                                processData: false,
+                                                data: formData,
+                                                success: function (response) {
+                                                    if(response)
+                                                    { $("#dialogContent1").remove(); }
+                                                    else{
+                                                    let l2 = document.getElementById("error-Rlogin1");
+                                                    l2.style.display = "inline";
+                                                    }
+                                                },
+                                                error: function (x, y, z) {
+                                                    alert(x + '\n' + y + '\n' + z);
+                                                }
+                                            });
+                                        }
+                                    },
+                                    error: function (x, y, z) {
+                                        alert(x + '\n' + y + '\n' + z);
+                                    }
+                                });
+                            }
+                        }
+                    });
             });
             $("#btn-registration").on("click", function () {                
                 let formData1 = new FormData();
@@ -94,7 +192,7 @@
               
             });
             $("#Login").on("focus", function (){
-                let l1 = document.getElementById("error-Rlogin");
+                let l1 = document.getElementById("error-Rlogin1");
                 l1.style.display = "none";
             });
             $("#btn-log").on("click", function () {
@@ -107,9 +205,9 @@
                     contentType: false,
                     processData: false,
                     data: formData,
-                    success: function (response) {
+                    success: function (response1) {
                         
-                        if(response){
+                        if(response1){
                             let l1 = document.getElementById("error-login");
                             l1.style.display = "none";
                         loginNone();
@@ -204,6 +302,7 @@
         let registr = function () {
             let l = document.getElementById("registrationForm");
             l.style.display = "block";
+
         };
         let registrNone = function () {
             let l = document.getElementById("registrationForm");
@@ -225,7 +324,7 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
-@using (Html.BeginForm())
+@*@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
     <div class="card" id="login" style="display:none;">
@@ -290,7 +389,7 @@
             </div>
         </div>
     </div>   
-</form>
+</form>*@
 <br />
 <br />
 <div class="text-center">

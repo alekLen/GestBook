@@ -15,13 +15,13 @@ namespace GestBook.Controllers
         {
             rep = context;
         }
-        /*public IActionResult Registration()
+        public IActionResult Registration()
         {
-            return View();
-        }*/
+            return PartialView("Registration");
+        }
 
         [HttpPost]
-        public async Task<IActionResult> Registration( RegisterModel user)
+        public async Task<IActionResult> Registration([Bind("Login,Password,PasswordConfirm")] RegisterModel user)
         {          
             if (ModelState.IsValid)
             {
@@ -47,18 +47,18 @@ namespace GestBook.Controllers
                     await rep.AddSalt(s);
                     await rep.Save();
                 }
-                catch { }
+                catch { return Json(false); }
                 string response = "Вы успешно зарегестрировались!";
                 return Json(response);
             }
-            return Problem("Проблемы регистрации!");
+            return Json(false);
         }
-       /* public IActionResult Login()
+        public IActionResult Login()
         {
-            return View();
-        }*/
+            return PartialView("Login");
+        }
         [HttpPost]
-        public async Task<IActionResult> Login(LoginModel user)
+        public async Task<IActionResult> Login([Bind("Login,Password")] LoginModel user)
         {
             if (ModelState.IsValid) {
                 
