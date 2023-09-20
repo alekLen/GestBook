@@ -1,0 +1,15 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div class="card c3">
+    <span id="error-mess" style="color:red;display:none;">*напишите отзыв</span>
+    <textarea rows="3" onfocus="focusm()" id="TextMessage"></textarea>
+</div>
+<script>
+    let focusm = function () {
+        let l1 = document.getElementById("error-mess");
+        l1.style.display = "none";
+    }
+</script>

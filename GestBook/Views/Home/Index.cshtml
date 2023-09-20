@@ -76,6 +76,44 @@
                 });
             });
 
+            $("body").on("click", ".btn-addMess", function (e) {
+                e.preventDefault();
+                $("<div id='dialogContent'></div>")
+                    .addClass("dialog")
+                    .appendTo("body")
+                    .load("/Home/AddMessage")
+                    .dialog({
+                        title: "Оставить отзыв",
+                        close: function () { $(this).remove() },
+                        modal: true,
+                        buttons: {
+                            "Отправить": function () {
+                                let formData = new FormData();
+                                formData.append("Text", $("#TextMessage").val());
+                                $.ajax({
+                                    url: "@Url.Action( "AddMessage","Home")",
+                                    type: "POST",
+                                    data: formData,
+                                    contentType: false,
+                                    processData: false,
+                                    success: function (response) {
+
+                                        if (response) {
+                                            alert("ваш отзыв сохранен!");
+                                            $("#dialogContent").remove();
+                                            getAllMessages();
+                                        }
+                                        else {
+                                            let l2 = document.getElementById("error-mess");
+                                            l2.style.display = "inline";
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    });
+            });
+
             $("body").on("click", ".btn-Reg", function (e) {
                 e.preventDefault();
                 $("<div id='dialogContent1'></div>")
@@ -90,11 +128,11 @@
                             "Зарегестрироваться": function () {
                                 let formData1 = new FormData();
                                 formData1.append("Login", $("#Login").val());
-                              /* if ($("#Password").val() == "" || $("#PasswordConfirm").val() == "" || $("#Login").val() == "" ) {
+                               if ($("#Password").val() == "" || $("#PasswordConfirm").val() == "" || $("#Login").val() == "" ) {
                                     let l1 = document.getElementById("error-Rlogin4");
                                     l1.style.display = "inline";
                                 }
-                                else {*/
+                                else {
                                     $.ajax({
                                         url: '@Url.Action("IsLoginInUse", "Login")',
                                         type: 'POST',
@@ -144,139 +182,24 @@
                                             alert(x + '\n' + y + '\n' + z);
                                         }
                                     });
-                                //}
+                                }
                             }
                         }
                     });
             });
-            $("#btn-registration").on("click", function () {                
-                let formData1 = new FormData();
-                formData1.append("Login", $("#Login").val());
-                $.ajax({
-                    url: '@Url.Action("IsLoginInUse", "Login")',
-                    type: 'POST',
-                    contentType: false,
-                    processData: false,
-                    data: formData1,
-                    success: function (response) {                      
-                        if(response)
-                        {                          
-                            let l1 = document.getElementById("error-Rlogin");
-                            l1.style.display = "inline";
-                        }
-                        else
-                        {
-                            let formData = new FormData();
-                            formData.append("Login", $("#Login").val());
-                            formData.append("Password", $("#Reg_Password1").val());
-                            formData.append("PasswordConfirm", $("#Reg_Password2").val());
-                            $.ajax({
-                                url: '@Url.Action("Registration", "Login")',
-                                type: 'POST',
-                                contentType: false,
-                                processData: false,
-                                data: formData,
-                                success: function (response) {
-                                    alert(response);
-                                   // registrNone();
-                                  //  ClearRegistr();
-                                   // login();
-                                },
-                                error: function (x, y, z) {
-                                    alert(x + '\n' + y + '\n' + z);
-                                }
-                            });
-                        }
-                    },
-                    error: function (x, y, z) {
-                        alert(x + '\n' + y + '\n' + z);
-                    }
-                });
-            
-               
-              
-            });
+         
             $("#Login").on("focus", function (){
                 let l1 = document.getElementById("error-Rlogin1");
                 l1.style.display = "none";
             });
-            $("#btn-log").on("click", function () {
-                let formData = new FormData();
-                formData.append("Login", $("#log").val());
-                formData.append("Password", $("#pass").val());
-                $.ajax({
-                    url: '@Url.Action("Login", "Login")',
-                    type: 'POST',
-                    contentType: false,
-                    processData: false,
-                    data: formData,
-                    success: function (response1) {
-                        
-                        if(response1){
-                            let l1 = document.getElementById("error-login");
-                            l1.style.display = "none";
-                        loginNone();
-                        ClearLogin();
-                        let l = document.getElementById("wellcome");
-                        l.style.display = "block";
-                        let lt = document.getElementById("enter");
-                        lt.style.display = "none";
-                        let lm = document.getElementById("message");
-                        lm.style.display = "block";
-                        $.ajax({
-                            url: '@Url.Action("GetName", "Login")',
-                            type: 'GET',
-                            contentType: false,
-                            processData: false,                          
-                            success: function (response) {
-                                $("#wellcomeTo").html(response);
-                            },
-                            error: function (x, y, z) {
-                                alert(x + '\n' + y + '\n' + z);
-                            }
-                        });
-                        }
-                        else
-                        {
-                            let l2 = document.getElementById("error-login");
-                            l2.style.display = "inline";
-                        }
-                    },
-                    error: function (x, y, z) {
-                        alert(x + '\n' + y + '\n' + z);
-                    }
-                });
-            });
-            $("#btn-addMess").on("click", function () {
-                let formData = new FormData();
-                formData.append("Text", $("#TextMessage").val());
-                $.ajax({
-                    url: '@Url.Action("AddMessage", "Login")',
-                    type: 'POST',
-                    contentType: false,
-                    processData: false,
-                    data: formData,
-                    success: function (response) {
-                        alert(response);
-                        $("#TextMessage").val("");
-                        getAllMessages();
-                    },
-                    error: function (x, y, z) {
-                        alert(x + '\n' + y + '\n' + z);
-                    }
-                });
-            });
+        
 
        });
            
         let login =function(){
             let l = document.getElementById("login");
             l.style.display = "block";
-        };
-        let loginNone = function () {
-            let l = document.getElementById("login");
-            l.style.display = "none";
-        };
+        };     
           
             let row = function (message) {
                 return "<div>" + message.user + " </div>" + 
@@ -302,27 +225,7 @@
                         alert(x + '\n' + y + '\n' + z);
                     }
                 });
-            }
-        let registr = function () {
-            let l = document.getElementById("registrationForm");
-            l.style.display = "block";
-
-        };
-        let registrNone = function () {
-            let l = document.getElementById("registrationForm");
-            l.style.display = "none";
-        };
-         let ClearRegistr = function () {
-             $("#Login").val("");
-            $("#Reg_Password1").val("");
-            $("#Reg_Password2").val("");
-        };
-        let ClearLogin = function () {
-             $("#log").val("");
-             $("#pass").val("");
-        };
-            
-       
+            }          
     </script>  
 }
 <br />
@@ -332,15 +235,10 @@
 </div>
 <div id="message" style="display:none;">
    <form>
-        <br>
-        <br>
-        <label>Оставьте свой отзыв</label>
-        <div class="card">
-             <textarea rows="3" id="TextMessage"></textarea>  
-            </div>
+        <br>                   
         <div>
             <br>
-            <a href="javascript:void(0)" class="nav-link text-dark card2 but" id="btn-addMess">Отправить</a>
+            <a href="javascript:void(0)" class="nav-link text-dark card2 but btn-addMess" id="btn-addMess">Оставить отзыв</a>
         </div>
     </form>
   

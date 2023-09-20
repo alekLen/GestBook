@@ -12,7 +12,7 @@
             <div>
                @Html.DisplayNameFor(model => model.Login)
                 <div>
-                <input asp-for="Login" onfocus="focusl()" class="form-control" />
+                <input asp-for="Login" onfocus="focusr()" class="form-control" />
                 <span asp-validation-for="Login"  class="text-danger"></span>
                 </div>
             </div>
@@ -20,7 +20,7 @@
             <div>
             @Html.DisplayNameFor(model => model.Password)
                 <div>
-                <input asp-for="Password" onfocus="focusl()" type="password" class="form-control" />
+                <input asp-for="Password" onfocus="focusr()" type="password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
             </div>
@@ -29,7 +29,7 @@
             @Html.DisplayNameFor(model => model.PasswordConfirm)
            
                 <div>
-                <input asp-for="PasswordConfirm" onfocus="focusl()" type="password" class="form-control" />
+                <input asp-for="PasswordConfirm" onfocus="focusr()" type="password" class="form-control" />
                 <span asp-validation-for="PasswordConfirm" class="text-danger"></span>
                 </div>
             </div>
@@ -37,7 +37,7 @@
     </div>
 </form>
 <script>
-    let focusl=function(){
+    let focusr=function(){
         let l1 = document.getElementById("error-Rlogin3");
         l1.style.display = "none";
         let l2 = document.getElementById("error-Rlogin2");

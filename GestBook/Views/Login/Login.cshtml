@@ -9,7 +9,7 @@
             <div>
                 @Html.LabelFor(model => model.Login)
                 <div>
-                    <input asp-for="Login" class="form-control" />
+                <input asp-for="Login" onfocus="focusl()" class="form-control" />
                     @Html.ValidationMessageFor(model => model.Login, "")
                 </div>
             </div>
@@ -17,18 +17,16 @@
             <div>
                 @Html.LabelFor(model => model.Password)             
                 <div>
-                    <input asp-for="Password" type="password" class="form-control" />
+                <input asp-for="Password" onfocus="focusl()" type="password" class="form-control" />
                     @Html.ValidationMessageFor(model => model.Password, "")
                 </div>
             </div>
-
-            <div>
-                <br>
-                @*<div>
-                    <input type="submit" value="Войти" />
-                </div>*@
-            </div>
-       
-       
+           
     </div>
 </form>
+<script>
+    let focusl = function () {
+        let l1 = document.getElementById("error-login1");
+        l1.style.display = "none";       
+    }
+</script>

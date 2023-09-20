@@ -77,14 +77,14 @@ namespace GestBook.Controllers
                         }
                         else
                         {
-                            //ModelState.AddModelError("", "не правильный логин или пароль");
+                           //ModelState.AddModelError("", "не правильный логин или пароль");
                             //return Problem("Проблемы входа!");
                             return Json(false);
                         }
                     }
                     else
                     {
-                        // ModelState.AddModelError("", "не правильный логин или пароль");
+                       // ModelState.AddModelError("", "не правильный логин или пароль");
                         // return Problem("Проблемы входа!"); 
                         return Json(false);
                     }
@@ -105,30 +105,7 @@ namespace GestBook.Controllers
             return Json(response);
         }
         [HttpPost]
-        public async Task<IActionResult> AddMessage([Bind("Text")]Message mes)
-        {
-            if (ModelState.IsValid)
-            {
-                var u = await rep.GetUser( HttpContext.Session.GetString("login"));
-                mes.user= u;
-                mes.MessageDate=DateTime.Now.ToString();
-                try
-                {
-                    await rep.AddMessage(mes);
-                    await rep.Save();
-                    string response ="Ваш отзыв добавлен в Гостевую книгу!";
-                    return Json(response);
-                }
-                catch
-                {
-                    string response1 = "Ошибка добавления! попробуйте позже!";
-                    return Json(response1);
-                }
-                
-            }
-            string response2 = "Ошибка добавления! попробуйте позже!";
-            return Json(response2);
-        }
+       
         [HttpPost]  
         public async Task<IActionResult> IsLoginInUse(string login)
         {
