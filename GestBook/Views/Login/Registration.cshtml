@@ -3,20 +3,24 @@
 
 <form  >
     @Html.AntiForgeryToken()
-    <div class="card">
+    <div class="card c3">
+        <span id="error-Rlogin1" style="color:red;display:none;">*логин уже зарегестрирован</span>
+        <span id="error-Rlogin2" style="color:red;display:none;">*ошибка регистрации</span>
+        <span id="error-Rlogin3" style="color:red;display:none;">*пароли не совпадают</span>
+        <span id="error-Rlogin4" style="color:red;display:none;">*заполните все поля</span>
             @Html.ValidationSummary(true, "")
             <div>
                @Html.DisplayNameFor(model => model.Login)
                 <div>
-                <input asp-for="Login" class="form-control" />
-                <span asp-validation-for="Login" class="text-danger"></span>
+                <input asp-for="Login" onfocus="focusl()" class="form-control" />
+                <span asp-validation-for="Login"  class="text-danger"></span>
                 </div>
             </div>
 
             <div>
             @Html.DisplayNameFor(model => model.Password)
                 <div>
-                <input asp-for="Password" type="password" class="form-control" />
+                <input asp-for="Password" onfocus="focusl()" type="password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
             </div>
@@ -25,16 +29,23 @@
             @Html.DisplayNameFor(model => model.PasswordConfirm)
            
                 <div>
-                <input asp-for="PasswordConfirm" type="password" class="form-control" />
+                <input asp-for="PasswordConfirm" onfocus="focusl()" type="password" class="form-control" />
                 <span asp-validation-for="PasswordConfirm" class="text-danger"></span>
                 </div>
             </div>
-
-            @*<div>
-                <div>
-                <button type="submit">Зарегистрироваться</button>
-                </div>
-        </div> *@
+          
     </div>
 </form>
+<script>
+    let focusl=function(){
+        let l1 = document.getElementById("error-Rlogin3");
+        l1.style.display = "none";
+        let l2 = document.getElementById("error-Rlogin2");
+        l2.style.display = "none";
+        let l3 = document.getElementById("error-Rlogin1");
+        l3.style.display = "none";
+        let l4 = document.getElementById("error-Rlogin4");
+        l4.style.display = "none";
+    }
+</script>
   

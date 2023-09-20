@@ -21,6 +21,7 @@ namespace GestBook.Controllers
         }
 
         [HttpPost]
+     
         public async Task<IActionResult> Registration([Bind("Login,Password,PasswordConfirm")] RegisterModel user)
         {          
             if (ModelState.IsValid)

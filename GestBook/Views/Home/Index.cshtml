@@ -11,22 +11,17 @@
             getAllMessages();
 
             $("body").on("click", ".btn-gestBook", function () {
-                //registrNone();           
-               // loginNone();
                 getAllMessages();
             });
 
             $("body").on("click", ".btn-Login", function (e) {
-               // registrNone();
-               // login();
                 e.preventDefault();
-
                 $("<div id='dialogContent'></div>")
                     .addClass("dialog")
                     .appendTo("body")
                     .load("/Login/Login")
                     .dialog({
-                        title: $(this).attr("data-dialog-title"),
+                        title:"Авторизация",
                         close: function () { $(this).remove() },
                         modal: true,
                         buttons: {
@@ -82,63 +77,74 @@
             });
 
             $("body").on("click", ".btn-Reg", function (e) {
-               // loginNone();                
-               // registr();
                 e.preventDefault();
-
                 $("<div id='dialogContent1'></div>")
                     .addClass("dialog")
                     .appendTo("body")
                     .load("/Login/Registration")
                     .dialog({
-                        title: $(this).attr("data-dialog-title"),
+                        title: "Регистрация",
                         close: function () { $(this).remove() },
                         modal: true,
                         buttons: {
                             "Зарегестрироваться": function () {
                                 let formData1 = new FormData();
                                 formData1.append("Login", $("#Login").val());
-                                $.ajax({
-                                    url: '@Url.Action("IsLoginInUse", "Login")',
-                                    type: 'POST',
-                                    contentType: false,
-                                    processData: false,
-                                    data: formData1,
-                                    success: function (response) {
-                                        if (response) {
-                                            alert("логин уже используется!")
-                                            let l1 = document.getElementById("error-Rlogin1");
-                                            l1.style.display = "inline";
-                                        }
-                                        else {
-                                            let formData = new FormData();
-                                            formData.append("Login", $("#Login").val());
-                                            formData.append("Password", $("#Password").val());
-                                            formData.append("PasswordConfirm", $("#PasswordConfirm").val());
-                                            $.ajax({
-                                                url: '@Url.Action("Registration", "Login")',
-                                                type: 'POST',
-                                                contentType: false,
-                                                processData: false,
-                                                data: formData,
-                                                success: function (response) {
-                                                    if(response)
-                                                    { $("#dialogContent1").remove(); }
-                                                    else{
-                                                    let l2 = document.getElementById("error-Rlogin1");
-                                                    l2.style.display = "inline";
-                                                    }
-                                                },
-                                                error: function (x, y, z) {
-                                                    alert(x + '\n' + y + '\n' + z);
+                              /* if ($("#Password").val() == "" || $("#PasswordConfirm").val() == "" || $("#Login").val() == "" ) {
+                                    let l1 = document.getElementById("error-Rlogin4");
+                                    l1.style.display = "inline";
+                                }
+                                else {*/
+                                    $.ajax({
+                                        url: '@Url.Action("IsLoginInUse", "Login")',
+                                        type: 'POST',
+                                        contentType: false,
+                                        processData: false,
+                                        data: formData1,
+                                        success: function (response) {
+                                            if (response) {
+
+                                                let l1 = document.getElementById("error-Rlogin1");
+                                                l1.style.display = "inline";
+                                            }                                           
+                                            else {
+                                                if ($("#Password").val() != $("#PasswordConfirm").val()) {
+                                                    let l1 = document.getElementById("error-Rlogin3");
+                                                    l1.style.display = "inline";
                                                 }
-                                            });
+                                                else { 
+                                                let formData = new FormData();
+                                                formData.append("Login", $("#Login").val());
+                                                formData.append("Password", $("#Password").val());
+                                                formData.append("PasswordConfirm", $("#PasswordConfirm").val());
+                                                $.ajax({
+                                                    url: '@Url.Action("Registration", "Login")',
+                                                    type: 'POST',
+                                                    contentType: false,
+                                                    processData: false,
+                                                    data: formData,
+                                                    success: function (response) {
+                                                        if (response) {
+                                                            alert("Успешная регистрация!");
+                                                            $("#dialogContent1").remove();
+                                                        }
+                                                        else {
+                                                            let l2 = document.getElementById("error-Rlogin2");                                                            
+                                                            l2.style.display = "inline";
+                                                        }
+                                                    },
+                                                    error: function (x, y, z) {
+                                                        alert(x + '\n' + y + '\n' + z);
+                                                    }
+                                                });
+                                                }
+                                            }
+                                        },
+                                        error: function (x, y, z) {
+                                            alert(x + '\n' + y + '\n' + z);
                                         }
-                                    },
-                                    error: function (x, y, z) {
-                                        alert(x + '\n' + y + '\n' + z);
-                                    }
-                                });
+                                    });
+                                //}
                             }
                         }
                     });
@@ -155,7 +161,6 @@
                     success: function (response) {                      
                         if(response)
                         {                          
-                            alert("логин уже используется!")
                             let l1 = document.getElementById("error-Rlogin");
                             l1.style.display = "inline";
                         }
@@ -173,9 +178,9 @@
                                 data: formData,
                                 success: function (response) {
                                     alert(response);
-                                    registrNone();
-                                    ClearRegistr();
-                                    login();
+                                   // registrNone();
+                                  //  ClearRegistr();
+                                   // login();
                                 },
                                 error: function (x, y, z) {
                                     alert(x + '\n' + y + '\n' + z);
@@ -272,14 +277,13 @@
             let l = document.getElementById("login");
             l.style.display = "none";
         };
-            // создание строки для таблицы
+          
             let row = function (message) {
                 return "<div>" + message.user + " </div>" + 
                     "<div class='card'  >" + message.Text + " </div>"+
                 "<div class='c' >" + message.MessageDate + " </div><hr />"
             };
-
-            // Получение всех студентов
+           
             function getAllMessages() {
                 $.ajax({
                     url: '@Url.Action("GetMessages", "Home")',
@@ -319,77 +323,8 @@
         };
             
        
-    </script>
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    </script>  
 }
-@*@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    <div class="card" id="login" style="display:none;">
-      
-            @Html.ValidationSummary(true, "")
-            <label>Login</label>
-            <span id="error-login" style="color:red;display:none;">*не верный логин или пароль</span>
-            <div class="c2">
-                <input type="text" class="form-control" id="log" required>
-            </div>
-
-            <div>
-                <label>Password</label>
-                <div class="c2">
-                    <input type="password" class="form-control" id="pass" required>
-                </div>
-            </div>
-
-            <div>
-                <br>
-                <div>
-                    <a href="javascript:void(0)" class="nav-link text-dark card2 but" id="btn-log">Войти</a>
-                </div>
-            </div>
-              
-    </div>
-}
-<form id="registrationForm" style="display:none;" >
-   
-    @Html.AntiForgeryToken()
-    <div class="card">
-        @Html.ValidationSummary(true, "")
-        <div>
-            @Html.DisplayNameFor(model => model.Login)
-            <span id="error-Rlogin" style="color:red;display:none;">*логин уже зарегестрирован</span>
-            <div>
-            @Html.EditorFor(model => model.Login)
-                <span asp-validation-for="Login" class="text-danger"></span>
-            </div>
-        </div>
-
-        <div>
-            @Html.DisplayNameFor(model => model.Password)
-            <div>
-                @Html.PasswordFor(model => model.Password, new { id = "Reg_Password1" })
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-        </div>
-
-        <div>
-            @Html.DisplayNameFor(model => model.PasswordConfirm)
-
-            <div>
-            @Html.PasswordFor(model => model.PasswordConfirm, new { id = "Reg_Password2" })
-                <span asp-validation-for="PasswordConfirm" class="text-danger"></span>
-            </div>
-        </div><br />
-
-        <div>
-            <div>                              
-                <a href="javascript:void(0)" class="nav-link text-dark card2 but" id="btn-registration">Регистрация</a>
-            </div>
-        </div>
-    </div>   
-</form>*@
 <br />
 <br />
 <div class="text-center">
@@ -415,6 +350,8 @@
       
      </div>
 <hr />
-
+@{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
 
 
